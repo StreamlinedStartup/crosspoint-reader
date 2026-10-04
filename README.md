@@ -10,12 +10,12 @@ It is a port of [CrossPoint Reader](https://github.com/crosspoint-reader/crosspo
 - Uses the full 7.5 inch screen in landscape (800 x 480).
 - Turns pages with the keys on the top edge.
 - Shows the battery level.
+- Goes to sleep when you hold the right key for 3 seconds. Wakes when you press the right key.
 
 ## What does not work yet
 
 - Grayscale text. Text shows in black and white only.
 - Online updates. To update, flash a new file over USB or use the SD card update in Settings.
-- Sleep and wake. These are not fully tested.
 
 ## What you need
 
