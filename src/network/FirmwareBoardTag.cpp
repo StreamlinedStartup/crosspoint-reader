@@ -29,6 +29,8 @@
 #define CROSSPOINT_BOARD_NAME "murphy"
 #elif FREEINK_DEVICE_DELINK
 #define CROSSPOINT_BOARD_NAME "delink"
+#elif FREEINK_DEVICE_RETERMINAL_E1001
+#define CROSSPOINT_BOARD_NAME "reterminal_e1001"
 #else
 #error "FirmwareBoardTag: no FREEINK_DEVICE_* flag set; cannot derive board name"
 #endif
