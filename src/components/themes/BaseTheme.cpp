@@ -1,6 +1,7 @@
 #include "BaseTheme.h"
 
 #include <FreeInkUIGfxRenderer.h>
+#include <BoardConfig.h>
 #include <GfxRenderer.h>
 #include <HalClock.h>
 #include <HalGPIO.h>
@@ -182,6 +183,34 @@ void BaseTheme::drawProgressBar(const GfxRenderer& renderer, Rect rect, const si
 // and run into the neighbouring hint, and now wraps to at most two centred lines
 // (wrappedText() ellipsises anything that still doesn't fit). Shared so every
 // theme's drawButtonHints() gets the same behaviour.
+// Keys left to right: left = btn3 (up), middle = btn4 (down), right = btn2
+// (click) with btn1 (hold) after it. Centres are measured on the 800 px edge.
+void BaseTheme::drawTopKeyHints(GfxRenderer& renderer, const char* btn1, const char* btn2, const char* btn3,
+                                const char* btn4) {
+  constexpr int keyCenterX[] = {460, 560, 660};
+  constexpr int tabWidth = 96;
+  constexpr int tabHeight = 40;
+  constexpr int cornerRadius = 6;
+  constexpr int textYOffset = 9;
+
+  std::string rightLabel = btn2 != nullptr ? btn2 : "";
+  if (btn1 != nullptr && btn1[0] != '\0') {
+    rightLabel = rightLabel.empty() ? btn1 : rightLabel + " / " + btn1;
+  }
+  const char* labels[] = {btn3, btn4, rightLabel.c_str()};
+
+  const GfxRenderer::Orientation origOrientation = renderer.getOrientation();
+  renderer.setOrientation(GfxRenderer::UI_ORIENTATION);
+  for (int i = 0; i < 3; i++) {
+    if (labels[i] == nullptr || labels[i][0] == '\0') continue;
+    const int x = keyCenterX[i] - tabWidth / 2;
+    renderer.fillRect(x, 0, tabWidth, tabHeight, false);
+    renderer.drawRoundedRect(x, 0, tabWidth, tabHeight, 1, cornerRadius, false, false, true, true, true);
+    drawHintLabel(renderer, UI_10_FONT_ID, labels[i], x, tabWidth, 0, tabHeight, textYOffset);
+  }
+  renderer.setOrientation(origOrientation);
+}
+
 void BaseTheme::drawHintLabel(const GfxRenderer& renderer, const int fontId, const char* label, const int x,
                               const int boxWidth, const int boxTop, const int boxHeight, const int singleLineYOffset) {
   constexpr int textPadding = 4;  // keeps a wrapped label off the button's border
@@ -213,9 +242,13 @@ void BaseTheme::drawButtonHints(GfxRenderer& renderer, const char* btn1, const c
   if (gpio.hasTouch()) {
     return;
   }
+  if (BoardConfig::isReterminalE1001()) {
+    drawTopKeyHints(renderer, btn1, btn2, btn3, btn4);
+    return;
+  }
 
   const GfxRenderer::Orientation orig_orientation = renderer.getOrientation();
-  renderer.setOrientation(GfxRenderer::Orientation::Portrait);
+  renderer.setOrientation(GfxRenderer::UI_ORIENTATION);
 
   const int pageHeight = renderer.getScreenHeight();
   constexpr int buttonWidth = 106;

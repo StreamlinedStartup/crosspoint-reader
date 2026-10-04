@@ -43,6 +43,13 @@ class GfxRenderer {
     LandscapeCounterClockwise  // 800x480 logical coordinates, native panel orientation
   };
 
+  // Orientation of the non-reader UI (home, menus, popups, button hints).
+#ifdef CROSSPOINT_UI_LANDSCAPE
+  static constexpr Orientation UI_ORIENTATION = LandscapeCounterClockwise;
+#else
+  static constexpr Orientation UI_ORIENTATION = Portrait;
+#endif
+
  private:
   static constexpr size_t BW_BUFFER_CHUNK_SIZE = 8000;  // 8KB chunks to allow for non-contiguous memory
 
@@ -138,7 +145,7 @@ class GfxRenderer {
 
  public:
   explicit GfxRenderer(HalDisplay& halDisplay)
-      : display(halDisplay), renderMode(BW), orientation(Portrait), fadingFix(false) {}
+      : display(halDisplay), renderMode(BW), orientation(UI_ORIENTATION), fadingFix(false) {}
   ~GfxRenderer() { freeBwBufferChunks(); }
 
   // Setup

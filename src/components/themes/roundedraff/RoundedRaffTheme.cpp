@@ -1,5 +1,6 @@
 #include "RoundedRaffTheme.h"
 
+#include <BoardConfig.h>
 #include <GfxRenderer.h>
 #include <HalGPIO.h>
 #include <HalStorage.h>
@@ -203,9 +204,13 @@ void RoundedRaffTheme::drawButtonHints(GfxRenderer& renderer, const char* btn1, 
   if (gpio.hasTouch()) {
     return;
   }
+  if (BoardConfig::isReterminalE1001()) {
+    drawTopKeyHints(renderer, btn1, btn2, btn3, btn4);
+    return;
+  }
 
   const GfxRenderer::Orientation origOrientation = renderer.getOrientation();
-  renderer.setOrientation(GfxRenderer::Orientation::Portrait);
+  renderer.setOrientation(GfxRenderer::UI_ORIENTATION);
 
   const int pageWidth = renderer.getScreenWidth();
   const int pageHeight = renderer.getScreenHeight();

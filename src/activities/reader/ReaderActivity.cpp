@@ -115,7 +115,7 @@ void ReaderActivity::onExit() {
     pluginevents::emit(pluginevents::Event::ReaderExit, vars, 2);
   }
 
-  renderer.setOrientation(GfxRenderer::Orientation::Portrait);
+  renderer.setOrientation(GfxRenderer::UI_ORIENTATION);
   APP_STATE.readerActivityLoadCount = 0;
   APP_STATE.saveToFile();
 

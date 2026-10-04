@@ -278,7 +278,11 @@ class CrossPointSettings : public PersistableStore<CrossPointSettings> {
   uint8_t homeButtonLongPressAction = static_cast<uint8_t>(HomeButtonAction::ReaderMenu);
   // EPUB reading orientation settings
   // 0 = portrait (default), 1 = landscape clockwise, 2 = inverted, 3 = landscape counter-clockwise
+#ifdef CROSSPOINT_UI_LANDSCAPE
+  uint8_t orientation = LANDSCAPE_CCW;
+#else
   uint8_t orientation = PORTRAIT;
+#endif
   // Button layouts (front layout retained for migration only)
   uint8_t frontButtonLayout = BACK_CONFIRM_LEFT_RIGHT;
   uint8_t sideButtonLayout = PREV_NEXT;
